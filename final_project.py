@@ -1,8 +1,11 @@
 import streamlit as st
 import requests
 from transformers import pipeline
-import os
-import csv
+import pandas as pd
+import plotly.express as px
+
+# Fixed API Key
+API_KEY = "YggInXMJBU6C1te5XKIMukOHuBwjLuLJ"  # Replace with your actual API key
 
 # Function to fetch actual Free Cash Flows (FCF)
 def fetch_actual_free_cash_flows(api_key, ticker):
@@ -98,16 +101,14 @@ def dcf_analysis(free_cash_flows, discount_rate, terminal_growth_rate):
 # Streamlit App
 def main():
     st.title("Financial Analysis and Valuation Tool")
-    st.sidebar.title("User Input")
-    api_key = st.sidebar.text_input("Enter your API Key", value="YOUR_API_KEY")
     ticker = st.sidebar.text_input("Enter the company's ticker symbol (e.g., AAPL, META):", value="META").upper()
 
     if st.sidebar.button("Analyze"):
         # Fetch data
         st.write("Fetching financial data...")
-        historical_cash_flows = fetch_actual_free_cash_flows(api_key, ticker)
-        outstanding_shares = fetch_outstanding_shares(api_key, ticker)
-        historic_prices = fetch_historic_share_prices(api_key, ticker)
+        historical_cash_flows = fetch_actual_free_cash_flows(API_KEY, ticker)
+        outstanding_shares = fetch_outstanding_shares(API_KEY, ticker)
+        historic_prices = fetch_historic_share_prices(API_KEY, ticker)
 
         # Validate data
         if not historical_cash_flows or all(cf == 0 for cf in historical_cash_flows):
@@ -138,10 +139,11 @@ def main():
         share_price = valuation / outstanding_shares
         st.write(f"Estimated Share Price: ${share_price:.2f}")
 
-        # Display historical share prices
+        # Display historical share prices as a time series graph
         st.subheader("Historical Share Prices")
-        historic_prices_df = [{"Date": p["date"], "Close Price": p["close"]} for p in historic_prices]
-        st.dataframe(historic_prices_df)
+        historic_prices_df = pd.DataFrame(historic_prices)
+        fig = px.line(historic_prices_df, x="date", y="close", title="Historic Share Prices Over Time", labels={"date": "Date", "close": "Close Price"})
+        st.plotly_chart(fig)
 
 # Run the app
 if __name__ == "__main__":
