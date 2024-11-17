@@ -1,5 +1,8 @@
 streamlit
-requests
 transformers
+torch  # Use torch if you prefer PyTorch
+# OR
+tensorflow  # Use tensorflow if you prefer TensorFlow (not both unless necessary)
 pandas
 plotly
+requests
