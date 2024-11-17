@@ -4,9 +4,6 @@ from transformers import pipeline
 import pandas as pd
 import plotly.express as px
 
-# Fixed API Key
-API_KEY = "YggInXMJBU6C1te5XKIMukOHuBwjLuLJ"  # Replace with your actual API key
-
 # Function to fetch actual Free Cash Flows (FCF)
 def fetch_actual_free_cash_flows(api_key, ticker):
     url = f"https://financialmodelingprep.com/api/v3/financials/cash-flow-statement/{ticker}?apikey={api_key}"
@@ -101,14 +98,23 @@ def dcf_analysis(free_cash_flows, discount_rate, terminal_growth_rate):
 # Streamlit App
 def main():
     st.title("Financial Analysis and Valuation Tool")
+
+    # Sidebar inputs
+    st.sidebar.title("User Input")
+    api_key = st.sidebar.text_input("Enter your API Key", value="")  # API Key as user input
     ticker = st.sidebar.text_input("Enter the company's ticker symbol (e.g., AAPL, META):", value="META").upper()
 
     if st.sidebar.button("Analyze"):
+        # Validate API key
+        if not api_key:
+            st.error("Please enter a valid API key.")
+            return
+
         # Fetch data
         st.write("Fetching financial data...")
-        historical_cash_flows = fetch_actual_free_cash_flows(API_KEY, ticker)
-        outstanding_shares = fetch_outstanding_shares(API_KEY, ticker)
-        historic_prices = fetch_historic_share_prices(API_KEY, ticker)
+        historical_cash_flows = fetch_actual_free_cash_flows(api_key, ticker)
+        outstanding_shares = fetch_outstanding_shares(api_key, ticker)
+        historic_prices = fetch_historic_share_prices(api_key, ticker)
 
         # Validate data
         if not historical_cash_flows or all(cf == 0 for cf in historical_cash_flows):
