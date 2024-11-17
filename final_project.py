@@ -66,7 +66,7 @@ def predict_future_cash_flows(historical_cash_flows, growth_forecast):
 #    )
 #    sentiment = sentiment_analysis(growth_forecast)[0]
 
-    growth_rate = 0.05  # Default growth rate
+    growth_rate = 0.02  # Default growth rate
 #    if sentiment['label'] == "POSITIVE":
 #        growth_rate += 0.02  # Increase growth rate for positive sentiment
 #    elif sentiment['label'] == "NEGATIVE":
