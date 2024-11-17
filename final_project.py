@@ -60,17 +60,17 @@ def fetch_historic_share_prices(api_key, ticker):
 
 # AI-Powered Future Cash Flow Estimator
 def predict_future_cash_flows(historical_cash_flows, growth_forecast):
-    sentiment_analysis = pipeline(
-        "sentiment-analysis", 
-        model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"
-    )
-    sentiment = sentiment_analysis(growth_forecast)[0]
+#    sentiment_analysis = pipeline(
+#       "sentiment-analysis", 
+#        model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+#    )
+#    sentiment = sentiment_analysis(growth_forecast)[0]
 
     growth_rate = 0.05  # Default growth rate
-    if sentiment['label'] == "POSITIVE":
-        growth_rate += 0.02  # Increase growth rate for positive sentiment
-    elif sentiment['label'] == "NEGATIVE":
-        growth_rate -= 0.02  # Decrease growth rate for negative sentiment
+#    if sentiment['label'] == "POSITIVE":
+#        growth_rate += 0.02  # Increase growth rate for positive sentiment
+#    elif sentiment['label'] == "NEGATIVE":
+#        growth_rate -= 0.02  # Decrease growth rate for negative sentiment
 
     future_cash_flows = []
     last_cash_flow = historical_cash_flows[-1]
